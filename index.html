@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>زين عبد المالك - مطوّر ويب</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+        body {
+            margin: 0;
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #1e2a38, #121b26);
+            color: #d1d9e6;
+        }
+        header {
+            background: linear-gradient(to right, #1b2c52, #2d4a8a);
+            color: #f0f0f5;
+            text-align: center;
+            padding: 60px 20px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        .profile-wrapper {
+            position: relative;
+            width: 220px;
+            height: 220px;
+            margin: auto;
+            z-index: 1;
+        }
+        .profile-wrapper img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            display: block;
+            position: relative;
+            z-index: 2;
+        }
+        header h1,
+        header p {
+            position: relative;
+            z-index: 2;
+        }
+        header h1 {
+            font-size: 2.5em;
+            margin: 10px 0 5px;
+        }
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 40px 30px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(100, 100, 150, 0.3);
+            transition: box-shadow 0.3s ease;
+            position: relative;
+            z-index: 2;
+        }
+        .container:hover {
+            box-shadow: 0 12px 30px rgba(100, 100, 150, 0.45);
+        }
+        section {
+            margin-bottom: 50px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        h2 {
+            color: #b9aaff;
+            border-bottom: 2px solid #4e54c8;
+            padding-bottom: 10px;
+            margin-bottom: 25px;
+        }
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .project {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+            color: #d1d9e6;
+            transition: background 0.3s ease;
+            background-image: repeating-linear-gradient(0deg, rgba(255,255,255,0.04) 0, rgba(255,255,255,0.04) 1px, transparent 1px, transparent 20px), repeating-linear-gradient(90deg, rgba(255,255,255,0.04) 0, rgba(255,255,255,0.04) 1px, transparent 1px, transparent 20px);
+        }
+        .project:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .project h3 {
+            margin-top: 0;
+        }
+        .project-link {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #b9aaff;
+            color: #1e2a38;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+        .project-link:hover {
+            background-color: #a491ff;
+        }
+        .skills ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .skills li {
+            background: rgba(185, 170, 255, 0.3);
+            padding: 10px 15px;
+            border-radius: 20px;
+            color: #f0f0f5;
+            transition: background 0.3s ease;
+        }
+        .skills li:hover {
+            background: rgba(185, 170, 255, 0.6);
+        }
+        .contact p {
+            font-size: 1.1em;
+        }
+        footer {
+            background: radial-gradient(circle at center, #4e54c8, #2b2e4a);
+            text-align: center;
+            padding: 30px 20px;
+            font-size: 1em;
+            color: #ffffff;
+            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+        }
+        #particle-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+            background: transparent;
+        }
+    </style>
+</head>
+<body>
+<canvas id="particle-bg"></canvas>
+<header>
+    <canvas id="bgCanvas"></canvas>
+    <div class="profile-wrapper">
+        <img src="https://www.triovest.com/wp-content/uploads/2022/09/Ali-2.png" alt="زين عبد المالك" />
+    </div>
+    <h1>زين عبد المالك</h1>
+    <p>مبرمج ويب | Frontend & Backend</p>
+</header>
+<div class="container">
+    <section class="about" id="about">
+        <h2>من أنا؟</h2>
+        <p>أنا مطوّر ويب شغوف أعمل على بناء مواقع وتطبيقات عالية الجودة باستخدام أحدث تقنيات الويب، ولدي خبرة واسعة في تطوير الواجهات الأمامية والخلفية باستخدام تقنيات مثل MERN Stack (MongoDB، Express، React، Node.js). أؤمن بكتابة كود نظيف وقابل للتوسّع، وأسعى دائمًا لتعلّم كل جديد في مجال تطوير البرمجيات.</p>
+    </section>
+    <section class="projects" id="projects">
+        <h2>أعمالي</h2>
+        <div class="project-grid">
+            <div class="project">
+                <h3>منصة إدارة مهام</h3>
+                <p>تطبيق ويب مبني باستخدام MERN Stack لإدارة المهام بين الفرق، يحتوي على ميزات تسجيل الدخول، إنشاء المهام، وتتبع حالة كل مهمة.</p>
+                <a href="#" class="project-link">🔗 عرض المشروع</a>
+            </div>
+            <div class="project">
+                <h3>موقع شركة ناشئة</h3>
+                <p>موقع تعريفي متجاوب يعرض خدمات شركة ناشئة بطريقة احترافية باستخدام React وTailwind CSS مع تحسينات في سرعة التصفح.</p>
+                <a href="#" class="project-link">🔗 عرض المشروع</a>
+            </div>
+            <div class="project">
+                <h3>لوحة تحكم للمبيعات</h3>
+                <p>Dashboard يعرض تقارير المبيعات والمنتجات محدثة لحظيًا مع رسوم بيانية وتصفية متقدمة باستخدام React وChart.js.</p>
+                <a href="#" class="project-link">🔗 عرض المشروع</a>
+            </div>
+        </div>
+    </section>
+    <section class="skills" id="skills">
+        <h2>المهارات</h2>
+        <ul>
+            <li>HTML</li>
+            <li>CSS</li>
+            <li>JavaScript</li>
+        </ul>
+    </section>
+    <section class="contact" id="contact">
+  <h2>تواصل معي</h2>
+  <p>إذا كنت تعمل على مشروع، أو لديك فكرة وتبحث عن شريك تقني يحوّلها إلى واقع — لا تتردد في التواصل معي!</p>
+  <p>📧 للتواصل:</p>
+<p style="margin-top: -10px; margin-bottom: 15px; font-weight: bold; color: #b9aaff;">zainflash1998@gmail.com</p>
+<p>أو عبر المنصات التالية:</p>
+  <div style="display: flex; justify-content: center; gap: 25px; margin-top: 20px;">
+  <a href="https://wa.me/" target="_blank" style="display: flex; align-items: center; gap: 10px; background: linear-gradient(135deg, #25D366, #128C7E); padding: 12px 20px; border-radius: 12px; color: #fff; font-weight: bold; text-decoration: none; box-shadow: 0 4px 10px rgba(0,0,0,0.2); transition: transform 0.3s;">
+    <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp" style="width: 24px; height: 24px;"> واتساب
+  </a>
+  <a href="https://facebook.com/" target="_blank" style="display: flex; align-items: center; gap: 10px; background: linear-gradient(135deg, #1877f2, #0f65d2); padding: 12px 20px; border-radius: 12px; color: #fff; font-weight: bold; text-decoration: none; box-shadow: 0 4px 10px rgba(0,0,0,0.2); transition: transform 0.3s;">
+    <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook" style="width: 24px; height: 24px;"> فيسبوك
+  </a>
+</div>
+</section>
+</div>
+<footer>
+    &copy; 2025 زين عبد المالك — جميع الحقوق محفوظة.
+</footer>
+<script>
+const canvas = document.getElementById('bgCanvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = 300;
+let particles = [];
+const particleCount = 60;
+for (let i = 0; i < particleCount; i++) {
+    particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        radius: Math.random() * 3 + 1,
+        alpha: Math.random(),
+        speed: Math.random() * 0.2 + 0.05
+    });
+}
+function drawParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${p.alpha})`;
+        ctx.fill();
+        p.y -= p.speed;
+        if (p.y < -10) {
+            p.y = canvas.height + 10;
+            p.x = Math.random() * canvas.width;
+        }
+    });
+}
+function animateParticles() {
+    drawParticles();
+    requestAnimationFrame(animateParticles);
+}
+animateParticles();
+
+const bgCanvas = document.getElementById('particle-bg');
+const bgCtx = bgCanvas.getContext('2d');
+bgCanvas.width = window.innerWidth;
+bgCanvas.height = window.innerHeight;
+let bgParticles = [];
+const bgParticleCount = 100;
+for (let i = 0; i < bgParticleCount; i++) {
+  bgParticles.push({
+    x: Math.random() * bgCanvas.width,
+    y: Math.random() * bgCanvas.height,
+    radius: Math.random() * 1.5 + 0.5,
+    alpha: Math.random() * 0.3 + 0.1,
+    dx: (Math.random() - 0.5) * 0.5,
+    dy: (Math.random() - 0.5) * 0.5
+  });
+}
+function drawBgParticles() {
+  bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+  for (let i = 0; i < bgParticles.length; i++) {
+    const p = bgParticles[i];
+    bgCtx.beginPath();
+    bgCtx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+    bgCtx.fillStyle = `rgba(255, 255, 255, ${p.alpha})`;
+    bgCtx.fill();
+    p.x += p.dx;
+    p.y += p.dy;
+    if (p.x < 0 || p.x > bgCanvas.width) p.dx *= -1;
+    if (p.y < 0 || p.y > bgCanvas.height) p.dy *= -1;
+    for (let j = i + 1; j < bgParticles.length; j++) {
+      const p2 = bgParticles[j];
+      const dx = p.x - p2.x;
+      const dy = p.y - p2.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 100) {
+        bgCtx.beginPath();
+        bgCtx.strokeStyle = `rgba(255, 255, 255, 0.05)`;
+        bgCtx.moveTo(p.x, p.y);
+        bgCtx.lineTo(p2.x, p2.y);
+        bgCtx.stroke();
+      }
+    }
+  }
+}
+function animateBgParticles() {
+  drawBgParticles();
+  requestAnimationFrame(animateBgParticles);
+}
+animateBgParticles();
+const sections = document.querySelectorAll('section');
+const revealOnScroll = () => {
+    const trigger = window.innerHeight * 0.85;
+    sections.forEach(section => {
+        const top = section.getBoundingClientRect().top;
+        if (top < trigger) {
+            section.classList.add('visible');
+        }
+    });
+};
+window.addEventListener('scroll', revealOnScroll);
+revealOnScroll();
+</script>
+</body>
+</html>
